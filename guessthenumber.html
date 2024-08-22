@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FFC1CC, #FFDEE9, #ACB6E5);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .game-container {
+            background-color: #FFF5F7;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #FF69B4;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #FF69B4;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            width: 80%;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #FF69B4;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #FFB6C1;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #FF1493;
+        }
+
+        #newGameBtn {
+            display: none;
+        }
+    </style>
+    <script>
+        let randomNumber;
+        let attempts;
+        let maxAttempts = 10;
+
+        function startGame() {
+            randomNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            document.getElementById("result").innerText = "";
+            document.getElementById("userInput").value = "";
+            document.getElementById("submitBtn").disabled = false;
+            document.getElementById("newGameBtn").style.display = "none";
+        }
+
+        function guessNumber() {
+            let userInput = document.getElementById("userInput").value;
+            let guess = parseInt(userInput);
+            attempts++;
+
+            let resultText = "";
+
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                resultText = "🚫 Please enter a valid number between 1 and 100.";
+            } else if (guess < randomNumber) {
+                resultText = "📈 The number is higher. Attempts left: " + (maxAttempts - attempts) + " ❤️";
+            } else if (guess > randomNumber) {
+                resultText = "📉 The number is lower. Attempts left: " + (maxAttempts - attempts) + " ❤️";
+            } else {
+                resultText = "🎉 Congratulations! You've guessed the number in " + attempts + " attempts! 🥳";
+                document.getElementById("submitBtn").disabled = true;
+                document.getElementById("newGameBtn").style.display = "inline-block";
+            }
+
+            if (attempts >= maxAttempts && guess !== randomNumber) {
+                resultText = "❌ No attempts left. The number was: " + randomNumber + ". Better luck next time! 🌸";
+                document.getElementById("submitBtn").disabled = true;
+                document.getElementById("newGameBtn").style.display = "inline-block";
+            }
+
+            document.getElementById("result").innerText = resultText;
+        }
+
+        window.onload = startGame;
+    </script>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Guess the Number Game</h1>
+        <p>Can you guess the number I'm thinking of?</p>
+        <input type="number" id="userInput" placeholder="Enter a number">
+        <button id="submitBtn" onclick="guessNumber()">Submit Guess</button>
+        <button id="newGameBtn" onclick="startGame()">Start New Game</button>
+        <div id="result" class="result"></div>
+    </div>
+</body>
+</html>
